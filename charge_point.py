@@ -30,22 +30,38 @@ class ChargePoint(cp):
     
     connector_ID = 1
     id_TAG = "1111222233334444"
+    transaction_ID_str = ""
     
     
-    async def send_start_transaction()
+    
+    async def send_start_transaction(self):
         request = call.StartTransactionPayload(
-            vendor_id="OCUBE_EV",
-            message_id="getMemberUnitPrice.req", 
-            data="{\"connectorId\":" + str(ChargePoint.connector_ID) + ",\"idTag\":\"" + ChargePoint.id_TAG + "\"}"
-        )
-        await asyncio.sleep(5)
-        res = await self.call(request)
+            connector_id=ChargePoint.connector_ID,
+            id_tag=ChargePoint.id_TAG, 
+            meter_start=0,
+            timestamp=datetime.utcnow().date().isoformat() +"T13:56:00.410Z",
+            
+            #connector_id: int
+            #id_tag: str
+            #meter_start: int
+            #timestamp: str
+            #---------------
+            #reservation_id: Optional[int] = None
 
-    async def send_start_transaction()
+        
+        )
+        await asyncio.sleep(8)
+        res = await self.call(request)
+        print(res)
+
+    async def send_stop_transaction(self):
         request = call.StopTransactionPayload(
-            vendor_id="OCUBE_EV",
-            message_id="getMemberUnitPrice.req", 
-            data="{\"connectorId\":" + str(ChargePoint.connector_ID) + ",\"idTag\":\"" + ChargePoint.id_TAG + "\"}"
+            transaction_id=ChargePoint.transaction_ID_str,
+            
+            #transaction_id: str
+            #---------------------
+            #custom_data: Optional[Dict[str, Any]] = None
+        
         )
         await asyncio.sleep(5)
         res = await self.call(request)    
