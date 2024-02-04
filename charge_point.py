@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import time
+from datetime import datetime
 try:
     import websockets
 except ModuleNotFoundError:
@@ -29,6 +30,26 @@ class ChargePoint(cp):
     
     connector_ID = 1
     id_TAG = "1111222233334444"
+    
+    
+    async def send_start_transaction()
+        request = call.StartTransactionPayload(
+            vendor_id="OCUBE_EV",
+            message_id="getMemberUnitPrice.req", 
+            data="{\"connectorId\":" + str(ChargePoint.connector_ID) + ",\"idTag\":\"" + ChargePoint.id_TAG + "\"}"
+        )
+        await asyncio.sleep(5)
+        res = await self.call(request)
+
+    async def send_start_transaction()
+        request = call.StopTransactionPayload(
+            vendor_id="OCUBE_EV",
+            message_id="getMemberUnitPrice.req", 
+            data="{\"connectorId\":" + str(ChargePoint.connector_ID) + ",\"idTag\":\"" + ChargePoint.id_TAG + "\"}"
+        )
+        await asyncio.sleep(5)
+        res = await self.call(request)    
+    
     async def send_data_transfer_get_unit_price(self):
         
         request = call.DataTransferPayload(
@@ -41,11 +62,10 @@ class ChargePoint(cp):
     
     
     async def send_data_transfer_set_plug_state(self):
-        request = call.DataTransferPayload(
-    
+        request = call.DataTransferPayload(    
             vendor_id="OCUBE_EV",
             message_id="putConnectorPlugNotification.req",
-            data="{\"connectorId\": 1, \"timestamp\": \"2024-01-26T13:25:20.695Z\"}"
+            data="{\"connectorId\":" + str(ChargePoint.connector_ID) + ", \"timestamp\": \"" + datetime.utcnow().date().isoformat() +  "T13:56:00.410Z\"}"  #+datetime.utcnow().isoformat()+  "Z\"}"
         )
         await asyncio.sleep(7)
         res = await self.call(request)
@@ -108,6 +128,8 @@ async def main():
            cp.send_notify_status(ChargePointStatus.available),
            cp.send_data_transfer_get_unit_price(),
            cp.send_data_transfer_set_plug_state(), 
+           cp.send_start_transaction(),
+           #cp.send_meter_value(),
            
        
        )
