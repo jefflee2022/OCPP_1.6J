@@ -32,8 +32,21 @@ class ChargePoint(cp):
     id_TAG = "1111222233334444"
     transaction_ID = 0
     
-    
-    
+    async def send_meter_value(self,SocPercent):
+        request = call.MeterValuesPayload(
+            connector_id=ChargePoint.connector_ID,
+            meter_value='test', 
+            transaction_id=ChargePoint.transaction_ID,
+            
+            #connector_id: int
+            #meter_value: List = field(default_factory=list)
+            #transaction_id: Optional[int] = None
+
+        
+        )
+        await asyncio.sleep(8)
+        res = await self.call(request)
+        
     async def send_start_transaction(self):
         request = call.StartTransactionPayload(
             connector_id=ChargePoint.connector_ID,
@@ -165,9 +178,9 @@ async def main():
            cp.send_data_transfer_set_plug_state(), 
            cp.send_start_transaction(),
            cp.send_notify_status(ChargePointStatus.charging),
-           #cp.send_meter_value(20),
-           #cp.send_meter_value(22),
-           #cp.send_meter_value(25),
+           cp.send_meter_value(20),
+           cp.send_meter_value(22),
+           cp.send_meter_value(25),
            cp.send_stop_transaction(),
            
        
